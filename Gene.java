@@ -1,12 +1,9 @@
 package Classes;
 
 import java.util.List;
-import java.util.Map;
-
 public class Gene {
 	
 	private long begin, end;
-	private Genetic genetic = Genetic.getHistance();
 	private String locus;
 	private String sequence;
 	private List<Codon> codons;

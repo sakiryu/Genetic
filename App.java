@@ -3,11 +3,7 @@ package Classes;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.stream.Collectors;
 
 public class App {
 
@@ -17,7 +13,7 @@ public class App {
 		
 		try 
 		{
-			lf.inicializa(new File("H37RvSequence.txt"));
+			lf.inicializa(new File("sequenciatrab.txt"));
 		}
 		catch (FileNotFoundException e)
 		{
@@ -35,8 +31,12 @@ public class App {
 					ge.printCodons();
 					System.out.println("\n");
 				});
-		
 		//a.forEach(ge -> System.out.println(ge.getCodons().size()));
+		
+		//Prova:
+		//Exceções
+		//Lambda
+		//Streams
 		
 	}
 	
