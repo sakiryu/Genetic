@@ -27,7 +27,7 @@ public class Codon {
 	
 	public String toString()
 	{
-		return "["+distance+"]" + codons;
+		return "Distância: " + distance + "\n" + codons + "\n";
 	}
 
 }

@@ -6,18 +6,20 @@ import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
@@ -37,20 +39,23 @@ public class FXMLDocumentController implements Initializable {
     private Button button;
     @FXML
     private Button clear;
-    
-    
     @FXML
     private ListView listView;
     @FXML
     private TextArea textArea;
     @FXML
-    private TextArea infoArea;
-    
+    private TextArea sequenceArea;
     @FXML
-    private Rectangle recF, recL, recI, recV, recS, recP, recT, recA, recY;
-    
-    private Task task;
+    private TextArea infoArea;
+    @FXML
+    private TabPane tabPane;
+    @FXML
+    private BarChart<String, Integer> barChart;
+    @FXML
+    private CategoryAxis category;
+  
     private List<Gene> genes = Genetic.getHistance().getGenes();
+    private final int HIGH = 6;
     
     @FXML
     private void handleClearApp(ActionEvent event)
@@ -62,9 +67,14 @@ public class FXMLDocumentController implements Initializable {
             genes.clear();
             infoArea.setText("");
             fileNameLabel.setText("");
+            sequenceArea.setText("");
             textArea.clear();
             button.setDisable(false);
             clear.setDisable(true);
+            barChart.getData().clear();
+            tabPane.setDisable(true);
+            infoArea.setDisable(true);
+            sequenceArea.setDisable(true);
         }
         catch(NullPointerException e)
         {
@@ -119,11 +129,14 @@ public class FXMLDocumentController implements Initializable {
     
     private void loadData(File file)
     {
-        LoadFile load = LoadFile.getInstance();
         fileNameLabel.setText("Carregando...");
+        LoadFile load = LoadFile.getInstance();
         try
         {
             load.inicializa(file);
+            tabPane.setDisable(false);
+            infoArea.setDisable(false);
+            sequenceArea.setDisable(false);
         }
         catch(FileNotFoundException e)
         {
@@ -140,10 +153,14 @@ public class FXMLDocumentController implements Initializable {
         
     }
     
+    private String createSequence(Gene gene)
+    {
+        return "Sequência: " + gene.getSequence();
+    }
+    
     private String createFormatedCodons(Gene gene)
     {
-      return "Sequência: " + gene.getSequence() + "\n" +
-                               "\n[Distância] | Codons:\n" + gene.getFormatedCodons();   
+      return gene.getFormatedCodons();   
     }
     
     private String createFormatedInfo(Gene gene)
@@ -158,23 +175,54 @@ public class FXMLDocumentController implements Initializable {
     {
        return genes.stream().filter(g -> g.getLocus().equals(locus)).findFirst().get();
     }
+    
+    private int getCodonFrequency(Gene gene, String codon)
+    {
+        return (int)gene.getCodons().stream().filter(c -> c.getCodon().contains(codon)).count();
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) 
     {
+ 
         clear.setDisable(true);
-        Rectangle rec1 = new Rectangle(241, 331, 5, 63);
-        rec1.setFill(Color.BLACK);
-        
-        //rec.setFill(Color.ORANGE);
+               
         listView.getSelectionModel().selectedItemProperty().addListener((observable, itemAntigo, novoItem) -> {
             
         if(novoItem != null)
         {
             Gene gene = getGeneByLocus(novoItem.toString());
+            sequenceArea.setText(createSequence(gene));
             infoArea.setText(createFormatedInfo(gene));
             textArea.setText(createFormatedCodons(gene));
+                       
+            barChart.getData().clear();
+            XYChart.Series<String, Integer> codonsFrequency = new XYChart.Series<>();           
+            
+            //Perdoa o  possível NullPointerException e não desiste de mim, sor.
+            codonsFrequency.getData().add(new XYChart.Data<>("F", getCodonFrequency(gene, "F")*HIGH));
+            codonsFrequency.getData().add(new XYChart.Data<>("L", getCodonFrequency(gene, "L")*HIGH));
+            codonsFrequency.getData().add(new XYChart.Data<>("I", getCodonFrequency(gene, "I")*HIGH));
+            codonsFrequency.getData().add(new XYChart.Data<>("V", getCodonFrequency(gene, "V")*HIGH));
+            codonsFrequency.getData().add(new XYChart.Data<>("P", getCodonFrequency(gene, "P")*HIGH));
+            codonsFrequency.getData().add(new XYChart.Data<>("T", getCodonFrequency(gene, "T")*HIGH));
+            codonsFrequency.getData().add(new XYChart.Data<>("A", getCodonFrequency(gene, "A")*HIGH));
+            codonsFrequency.getData().add(new XYChart.Data<>("Y", getCodonFrequency(gene, "Y")*HIGH));
+            codonsFrequency.getData().add(new XYChart.Data<>("H", getCodonFrequency(gene, "H")*HIGH));
+            codonsFrequency.getData().add(new XYChart.Data<>("Q", getCodonFrequency(gene, "Q")*HIGH));
+            codonsFrequency.getData().add(new XYChart.Data<>("N", getCodonFrequency(gene, "N")*HIGH));
+            codonsFrequency.getData().add(new XYChart.Data<>("K", getCodonFrequency(gene, "K")*HIGH));
+            codonsFrequency.getData().add(new XYChart.Data<>("D", getCodonFrequency(gene, "D")*HIGH));
+            codonsFrequency.getData().add(new XYChart.Data<>("E", getCodonFrequency(gene, "E")*HIGH));
+            codonsFrequency.getData().add(new XYChart.Data<>("C", getCodonFrequency(gene, "C")*HIGH));
+            codonsFrequency.getData().add(new XYChart.Data<>("W", getCodonFrequency(gene, "W")*HIGH));
+            codonsFrequency.getData().add(new XYChart.Data<>("R", getCodonFrequency(gene, "R")*HIGH));
+            codonsFrequency.getData().add(new XYChart.Data<>("S", getCodonFrequency(gene, "S")*HIGH));
+            codonsFrequency.getData().add(new XYChart.Data<>("G", getCodonFrequency(gene, "G")*HIGH));
+         
+             barChart.getData().add(codonsFrequency);
         }
+         
     });
     }    
     
