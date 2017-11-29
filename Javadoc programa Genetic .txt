@@ -1,0 +1,137 @@
+Javadoc do Programa Genetic, Trabalho Final de POO
+
+Autores: Douglas Dallavale, Gabriel Fanto Stundner, Larissa Salerno
+
+Classe LoadFile.java:
+
+	Classe para Carregar um arquivo Texto e tratar as Strings dentro do texto.
+Separa as Strings e coloca dentro de um Locus para atrelar os genomas.
+	
+    Métodos:
+	
+	loadData(): Com esse Método ele percorre o arquivo com os genomas e 
+			    organiza eles com o código do locus, a sequencia onde 
+				começa e onde termina.
+    
+	LoadFile() : método construtor que se mantém constante.
+	
+	getInstance() : ele utiliza o método construtor, inicando ele se 
+	                a variavel este for null
+					
+	inicializa(File) : é o método que inicia a leitura do arquivo e inicia
+	                   o método loadData().
+					   
+					   
+Classe Genetic.java:
+
+    Classe onde guarda os métodos que mexem com as Strings e métodos que 
+  mexem com os codons do arquivo.
+  
+    Métodos:
+	
+	start() : método que inicia um ArrayList genes 
+
+    getHistance() : método que retorna uma instância da classe se não 
+                    existir uma ainda
+
+    getGenes() : método que retorna a instancia da classe 
+
+    addGene(Gene g) : método que se entra um gene e verifica se ele é null ou não,
+                      se for null ele mostra uma mensagem dizendo que não pode
+
+    getDistance(String strCodon) : 	método que verifica a distância do Met e do Stop
+                                     e apresenta a medida da distancia
+
+	separator(String codSequence) : Separa uma sequencia de texto, que são os genomas e
+                                    os separa em trios de genomas.	
+									 
+    createCodons(String codonSequence) : método que entra uma Sequencia e utiliza o 
+                                         método separator para separar em trios e 
+                                         depois utiliza o método generateAminoacid(String)
+                                         para alterar para o nome do codon daquele trio especifico.
+										 
+Classe Gene.java: 
+
+	Classe que verifica os locus e veem se possui genes, se não possuirem ele manda uma
+  mensagem que diz que não possui locus e se possuirem ele inicia o método Gene.
+  
+    Métodos:
+	   
+	Gene(): método construtor dessa classe
+	
+	getLocus() : método que retorna a variavel locus
+	
+	getSequence() : método que retorna a variavel sequence
+	
+	getCodons() : método que retorna a variavel codons
+	
+	printCodons() : método que imprime os codons encontrados
+	
+	setCodons() : método que inicia o codons e se o codons for null ele 
+	              apresenta uma mensagem de erro
+				  
+	toString() : método que serve para mostrar a saida da classe 
+	
+
+Classe Codon.java:
+	
+		Classe que possui os métodos para verificar a distancia e pegar
+	 o codon.
+	 
+	    Métodos:
+		
+		Codon(): método construtor da classe codons
+		
+		getDistance(): método que retorna a distancia entre codons
+		
+		getCodon(): método que retorna a variavel codons
+		
+		toString(): método de saida de String dos codons
+		
+Classe App.java: 
+
+       Classe que roda o sistema, sendo um passo antes da interface 
+	 gráfica, ela trata varias excessoes das classes anteriores
+	 
+	 
+Classe FXMLDocumentController.java: 
+
+      Classe onde se mexe com a interface gráfica e onde ficam os 
+    métodos que criam a interface.
+
+      Métodos:
+
+      handleClearApp(ActionEvent event) : método que desabilita todo
+       o programa para deixar no estado inicializa
+
+      handleButtonAction(ActionEvent event): método para inicializar 
+         os botões na interface gráfica
+
+      alert(String, AlertType): método que apresenta um alerta no 
+         interface gráfica.
+
+      loadData(): pega o arquivo feito na classe LoadFile()
+
+
+      createFormatedCodons() : formata os codons e os criam
+
+      getGeneByLocus(): filtra os genes de cada locus
+
+      initialize(): método para iniciar a interface gráfica 
+
+
+Classe Genetic.java
+
+    Classe que vai fazer rodar a interface gráfica no sistema, classe onde
+   o .jar irá rodar em cima.
+   
+     Métodos:
+
+     start(): método onde foi feito Override, onde ficam as informações
+              de como vai ficar a tela que será apresentada.
+
+     main(): método que roda o sistema e que apresenta para o usuário.			  
+ 
+    	  
+	   
+    										 
